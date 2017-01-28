@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 
+import SiteTemplate from '../../components/SiteTemplate/SiteTemplate';
+
 class NoMatch extends Component {
   render() {
     return (
-      <div>404, sorry.</div>
+      <SiteTemplate
+        element='404, sorry.'
+      />
     );
   }
 }

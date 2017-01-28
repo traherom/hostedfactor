@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 
-import Header from '../../components/Header/Header';
-
-import './Home.css';
+import SiteTemplate from '../../components/SiteTemplate/SiteTemplate';
 
 class Home extends Component {
   render() {
     return (
-        <div className="Home">
-          <Header />
-        </div>
+      <SiteTemplate
+        element='Home page'
+      />
     );
   }
 }
