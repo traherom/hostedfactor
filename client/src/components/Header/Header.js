@@ -42,7 +42,7 @@ class Header extends Component {
           title="HostedFactor"
           showMenuIconButton={false}
           iconElementRight={
-            this.props.user.name !== '' ?
+            this.props.user.status.loggedIn ?
               <LoggedInMenu
                 open={this.props.menuOpen}
                 onOpen={this.props.onMenuOpen}

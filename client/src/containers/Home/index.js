@@ -7,7 +7,7 @@ class HomeCore extends Component {
   render() {
     return (
       <SiteTemplate
-        element='Home page'
+        element={<div>Home</div>}
       />
     );
   }
