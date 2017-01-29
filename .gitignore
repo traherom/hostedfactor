@@ -1,0 +1,6 @@
+tags
+__pycache__
+.env
+.python-version
+node_modules
+

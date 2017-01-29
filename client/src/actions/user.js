@@ -104,7 +104,17 @@ export function performLogin(username, password) {
       .then(() => scryptPromise(password, username))
       .then((pw) => checkCreds = pw)
       .then(() => dispatch(doneGeneratingCreds()))
-      // TODO chehck against server
+      .then(() => fetch('/api/v1/users/authenticate/', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          user: username,
+          credentials: checkCreds,
+        }),
+      }))
       .then(() => dispatch(loginSucceeded(username)))
       .then(() => dispatch(generatingKey(0)))
       .then(() => scryptPromise(password + password, username))
