@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -10,56 +9,65 @@ import Divider from 'material-ui/Divider';
 import SignInButton from '../../components/SignInButton/SignInButton';
 
 class LoggedInMenu extends Component {
+  handleChange = (open) => { open ? this.props.onOpen() : this.props.onClose() }
+
   render() {
     return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        open={this.state.openMenu}
+        open={this.props.open}
+        onRequestChange={this.handleChange}
       >
         <MenuItem primaryText="Add Item" />
         <Divider />
-        <MenuItem primaryText="Sign Out" />
+        <MenuItem primaryText="Sign Out" onClick={this.props.onLogout} />
       </IconMenu>
     );
   }
 }
 
+LoggedInMenu.propTypes = {
+  open: React.PropTypes.bool.isRequired,
+
+  onOpen: React.PropTypes.func.isRequired,
+  onClose: React.PropTypes.func.isRequired,
+  onLogout: React.PropTypes.func.isRequired,
+};
+
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openDrawer: false,
-      openMenu: false,
-    };
-  }
-
-  handleDrawerToggle = () => this.setState({openDrawer: !this.state.openDrawer});
-  handleDrawerClose = () => this.setState({openDrawer: false});
-
-  handleMenuToggle = () => this.setState({openMenu: !this.state.openMenu});
-  handleMenuClose = () => this.setState({openMenu: false});
-
   render() {
     return (
-        <div className="Header">
-          <AppBar
-            title="HostedFactor"
-            onLeftIconButtonTouchTap={this.handleDrawerToggle}
-            iconElementRight={this.props.loggedIn ? <LoggedInMenu /> : <SignInButton />}
-          />
-
-          <Drawer
-            docked={false}
-            open={this.state.openDrawer}
-            onRequestChange={(openDrawer) => this.setState({openDrawer})}
-          >
-            <AppBar showMenuIconButton={false} />
-            <MenuItem onTouchTap={this.handleDrawerClose}>Menu Item</MenuItem>
-            <MenuItem onTouchTap={this.handleDrawerClose}>Menu Item 2</MenuItem>
-          </Drawer>
-        </div>
+      <div className="Header">
+        <AppBar
+          title="HostedFactor"
+          showMenuIconButton={false}
+          iconElementRight={
+            this.props.user.name !== '' ?
+              <LoggedInMenu
+                open={this.props.menuOpen}
+                onOpen={this.props.onMenuOpen}
+                onClose={this.props.onMenuClose}
+                onLogout={this.props.onLogout}
+              />
+              :
+              <SignInButton />
+          }
+        />
+      </div>
     );
   }
 }
+
+Header.propTypes = {
+  user: React.PropTypes.shape({
+    name: React.PropTypes.string.isRequired,
+  }).isRequired,
+
+  menuOpen: React.PropTypes.bool.isRequired,
+
+  onMenuOpen: React.PropTypes.func.isRequired,
+  onMenuClose: React.PropTypes.func.isRequired,
+  onLogout: React.PropTypes.func.isRequired,
+};
 
 export default Header;

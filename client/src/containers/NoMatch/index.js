@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import SiteTemplate from '../../components/SiteTemplate/SiteTemplate';
+import SiteTemplate from '../../components/SiteTemplate';
 
 class NoMatch extends Component {
   render() {

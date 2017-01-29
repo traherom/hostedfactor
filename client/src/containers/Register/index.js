@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-import SiteTemplate from '../../components/SiteTemplate/SiteTemplate';
+import SiteTemplate from '../../components/SiteTemplate';
 
 class Register extends Component {
   handleLoginClick = () => { browserHistory.push('/login'); }
