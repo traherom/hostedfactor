@@ -21,6 +21,13 @@ export function setPasswordValue(value) {
   };
 }
 
+export function setPassword2Value(value) {
+  return {
+    type: 'SET_PASSWORD2_VALUE',
+    value,
+  };
+}
+
 export function logout() {
   return {
     type: 'LOGOUT',
@@ -30,6 +37,12 @@ export function logout() {
 export function loginStarted() {
   return {
     type: 'LOGIN_STARTED',
+  };
+}
+
+export function registrationStarted() {
+  return {
+    type: 'REGISTER_STARTED',
   };
 }
 
@@ -47,6 +60,13 @@ export function setPasswordMessage(message = '') {
   };
 }
 
+export function setPassword2Message(message = '') {
+  return {
+    type: 'SET_PASSWORD2_MESSAGE',
+    message,
+  };
+}
+
 export function loginFailed() {
   return {
     type: 'LOGIN_FAILED',
@@ -56,6 +76,19 @@ export function loginFailed() {
 export function loginSucceeded(username) {
   return {
     type: 'LOGIN_SUCCEEDED',
+    username,
+  };
+}
+
+export function registrationFailed() {
+  return {
+    type: 'REGISTER_FAILED',
+  };
+}
+
+export function registrationSucceeded(username) {
+  return {
+    type: 'REGISTER_SUCCEEDED',
     username,
   };
 }
@@ -116,6 +149,37 @@ export function performLogin(username, password) {
         }),
       }))
       .then(() => dispatch(loginSucceeded(username)))
+      .then(() => dispatch(generatingKey(0)))
+      .then(() => scryptPromise(password + password, username))
+      .then((pw) => encryptionCreds = pw)
+      .then(() => dispatch(doneGeneratingKey()))
+      .then(() => dispatch(setEncryptionKey(encryptionCreds)));
+  };
+}
+
+export function performRegister(username, password) {
+  return (dispatch) => {
+    let checkCreds = null;
+    let encryptionCreds = null;
+
+    return Promise.resolve()
+      .then(() => dispatch(registrationStarted()))
+      .then(() => dispatch(generatingCreds(0)))
+      .then(() => scryptPromise(password, username))
+      .then((pw) => checkCreds = pw)
+      .then(() => dispatch(doneGeneratingCreds()))
+      .then(() => fetch('/api/v1/users/register/', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          user: username,
+          credentials: checkCreds,
+        }),
+      }))
+      .then(() => dispatch(registrationSucceeded(username)))
       .then(() => dispatch(generatingKey(0)))
       .then(() => scryptPromise(password + password, username))
       .then((pw) => encryptionCreds = pw)

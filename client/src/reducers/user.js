@@ -4,11 +4,14 @@ export const defaultUserState = {
   status: {
     loggingIn: false,
     loggedIn: false,
+    registering: false,
 
     usernameMessage: '',
     usernameValue: '',
     passwordMessage: '',
     passwordValue: '',
+    password2Message: '',
+    password2Value: '',
 
     generatingKey: false,
     generatingCreds: false,
@@ -36,6 +39,15 @@ const user = (state = defaultUserState, action) => {
         },
       };
 
+    case 'SET_PASSWORD2_VALUE':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          password2Value: action.value,
+        },
+      };
+
     case 'LOGOUT':
       return {
         ...state,
@@ -57,6 +69,15 @@ const user = (state = defaultUserState, action) => {
         status: {
           ...state.status,
           passwordMessage: action.message,
+        },
+      };
+
+    case 'SET_PASSWORD2_MESSAGE':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          password2Message: action.message,
         },
       };
 
@@ -89,7 +110,50 @@ const user = (state = defaultUserState, action) => {
           ...state.status,
           loggingIn: false,
           loggedIn: true,
+          usernameMessage: '',
           passwordValue: '',
+          passwordMessage: '',
+          password2Value: '',
+          password2Message: '',
+        },
+      };
+
+    case 'REGISTER_STARTED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          loggingIn: false,
+          loggedIn: false,
+          registering: true,
+        },
+      };
+
+    case 'REGISTER_FAILED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          loggingIn: false,
+          loggedIn: false,
+          registering: false,
+        },
+      };
+
+    case 'REGISTER_SUCCEEDED':
+      return {
+        ...state,
+        name: action.username,
+        status: {
+          ...state.status,
+          loggingIn: false,
+          loggedIn: true,
+          registering: false,
+          usernameMessage: '',
+          passwordValue: '',
+          passwordMessage: '',
+          password2Value: '',
+          password2Message: '',
         },
       };
 
