@@ -33,6 +33,11 @@ class LoginCore extends Component {
 
   handleRegisterClick = () =>  { browserHistory.push('/register'); }
 
+  componentDidMount = () => {
+    // If already logged in, just go to the code page
+    browserHistory.push('/code');
+  };
+
   render() {
     let statusMsg = '';
     const status = this.props.user.status;

@@ -10,6 +10,7 @@ import reducer from './reducers';
 import Home from './containers/Home';
 import Login from './containers/Login';
 import Register from './containers/Register';
+import CodeList from './containers/CodeList';
 import NoMatch from './containers/NoMatch';
 
 // Setup store
@@ -30,6 +31,7 @@ class App extends Component {
             <Route path="/" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
+            <Route path="/code" component={CodeList} />
             <Route path="*" component={NoMatch}/>
           </Router>
         </MuiThemeProvider>

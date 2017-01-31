@@ -47,6 +47,11 @@ class RegisterCore extends Component {
     this.props.onRegister(user, pw1);
   }
 
+  componentDidMount = () => {
+    // If already logged in, just go to the code page
+    browserHistory.push('/code');
+  };
+
   render() {
     let statusMsg = '';
     const status = this.props.user.status;

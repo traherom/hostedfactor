@@ -1,3 +1,5 @@
+import { browserHistory } from 'react-router';
+
 var scrypt = require('scrypt-async');
 
 export function setUser(user) {
@@ -153,7 +155,8 @@ export function performLogin(username, password) {
       .then(() => scryptPromise(password + password, username))
       .then((pw) => encryptionCreds = pw)
       .then(() => dispatch(doneGeneratingKey()))
-      .then(() => dispatch(setEncryptionKey(encryptionCreds)));
+      .then(() => dispatch(setEncryptionKey(encryptionCreds)))
+      .then(() => browserHistory.push('/code'));
   };
 }
 
@@ -184,7 +187,8 @@ export function performRegister(username, password) {
       .then(() => scryptPromise(password + password, username))
       .then((pw) => encryptionCreds = pw)
       .then(() => dispatch(doneGeneratingKey()))
-      .then(() => dispatch(setEncryptionKey(encryptionCreds)));
+      .then(() => dispatch(setEncryptionKey(encryptionCreds)))
+      .then(() => browserHistory.push('/code'));
   };
 }
 
