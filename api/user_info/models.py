@@ -15,10 +15,8 @@ class UserLoginInfo(models.Model):
         null=False,
         )
 
-    credentials = models.CharField(max_length=255, help_text='Encrypted user password')
-
     # Rate limiting
-    last_login_attempt = models.DateTimeField(auto_now_add=True)
+    last_login_attempt = models.DateTimeField(auto_now_add=True, editable=True)
     failed_login_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):

@@ -32,6 +32,10 @@ class RegisterCore extends Component {
       this.props.onInvalidPassword('Password must not be blank');
       return;
     }
+    if(pw1.length < 8) {
+      this.props.onInvalidPassword('Password must be at least 8 characters');
+      return;
+    }
     this.props.onInvalidPassword();
 
     if(pw1 !== pw2) {

@@ -16,6 +16,8 @@ class Authenticate(APIView):
     """
     permission_classes = (permissions.AllowAny,)
 
+    RESPONSE_BAD_AUTH = Response({ 'message': 'Password/username incorrect', }, status=status.HTTP_401_UNAUTHORIZED)
+
     def post(self, request, format=None):
         """
         Attempt to log user in
@@ -24,12 +26,14 @@ class Authenticate(APIView):
         {"user":"traherom", "credentials":"aoeu"}
         """
         try:
-            user_info = models.UserLoginInfo.objects.get(user__username=request.data['user'])
+            user_info = models.UserLoginInfo.objects.select_related('user').get(user__username=request.data['user'])
         except KeyError:
             return Response({
                     'message': '"user" not supplied'
                 },
                 status=status.HTTP_400_BAD_REQUEST)
+        except models.UserLoginInfo.DoesNotExist:
+            return self.RESPONSE_BAD_AUTH
 
         try:
             creds = request.data['credentials']
@@ -49,7 +53,12 @@ class Authenticate(APIView):
                     },
                     status=status.HTTP_429_TOO_MANY_REQUESTS)
 
-        # TODO Check credentials
+        # Check credentials
+        if not user_info.user.check_password(creds):
+            user_info.failed_login_count += 1
+            user_info.last_login_attempt = timezone.now()
+            user_info.save()
+            return self.RESPONSE_BAD_AUTH
 
         # Reset failed login attempt and tell them about any failures
         failed_count = user_info.failed_login_count
@@ -75,6 +84,9 @@ class Register(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
+        """
+        Attempt to create a new user
+        """
         try:
             username = request.data['user']
         except KeyError:
@@ -95,7 +107,6 @@ class Register(APIView):
             user = User.objects.create_user(username, '{}@hostedfactor.io'.format(username), creds)
             user_info = models.UserLoginInfo.objects.create(
                 user=user,
-                credentials=creds,
             )
 
             return Response({
