@@ -48,8 +48,10 @@ class RegisterCore extends Component {
   }
 
   componentDidMount = () => {
-    // If already logged in, just go to the code page
-    browserHistory.push('/code');
+    if(this.props.user.status.loggedIn) {
+      // If already logged in, just go to the code page
+      browserHistory.push('/code');
+    }
   };
 
   render() {

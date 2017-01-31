@@ -34,8 +34,10 @@ class LoginCore extends Component {
   handleRegisterClick = () =>  { browserHistory.push('/register'); }
 
   componentDidMount = () => {
-    // If already logged in, just go to the code page
-    browserHistory.push('/code');
+    if(this.props.user.status.loggedIn) {
+      // If already logged in, just go to the code page
+      browserHistory.push('/code');
+    }
   };
 
   render() {
@@ -95,6 +97,7 @@ class LoginCore extends Component {
 LoginCore.propTypes = {
   user: React.PropTypes.shape({
     status: React.PropTypes.shape({
+      loggedIn: React.PropTypes.bool.isRequired,
       loggingIn: React.PropTypes.bool.isRequired,
 
       usernameValue: React.PropTypes.string.isRequired,
